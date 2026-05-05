@@ -137,16 +137,18 @@ video::-webkit-media-controls {
 </head>
 
 <body>
+    <!-- BUTTON -->
+<button onclick="openVideo()" class="watch-btn">
+  Watch Our Moment
+</button>
 
-<button class="open-btn" onclick="openVideo()">Watch Our Moment</button>
-
-<div class="overlay" id="overlay" onclick="closeVideo()">
-  <div class="modal" onclick="event.stopPropagation()">
-    <video id="video" controls playsinline>
+<!-- VIDEO POPUP -->
+<div id="videoOverlay" class="video-overlay">
+  <div class="video-modal" onclick="event.stopPropagation()">
+    <video id="weddingVideo" playsinline preload="auto">
       <source src="zoom1.mp4" type="video/mp4">
     </video>
   </div>
-</div>
 
 <script>
 const overlay = document.getElementById("overlay");
@@ -160,19 +162,6 @@ function openVideo() {
     video.play().catch(() => {});
   }, 200);
 }
-  <!-- BUTTON -->
-<button onclick="openVideo()" class="watch-btn">
-  Watch Our Moment
-</button>
-
-<!-- VIDEO POPUP -->
-<div id="videoOverlay" class="video-overlay">
-  <div class="video-modal" onclick="event.stopPropagation()">
-    <video id="weddingVideo" playsinline preload="auto">
-      <source src="zoom1.mp4" type="video/mp4">
-    </video>
-  </div>
-</div>
 
 function closeVideo() {
   overlay.classList.remove("active");
