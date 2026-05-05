@@ -3,171 +3,112 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Where it began…</title>
-
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600&family=Poppins:wght@300;400&display=swap" rel="stylesheet">
+<title>Wedding</title>
 
 <style>
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
-
 body {
-    height: 100vh;
-    overflow: hidden;
-    font-family: 'Poppins', sans-serif;
-    color: white;
-    background: radial-gradient(circle at center, #1a1a1a, #000);
-}
-
-/* PARTICLES CANVAS */
-canvas {
-    position: absolute;
-    top: 0;
-    left: 0;
-}
-
-/* CONTENT */
-.container {
-    position: relative;
-    z-index: 2;
-    height: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
-    text-align: center;
-    padding: 20px;
-}
-
-/* TEXT */
-h1 {
-    font-family: 'Playfair Display', serif;
-    font-size: 2.5rem;
-    margin-bottom: 20px;
-    opacity: 0;
-    animation: fade 2s ease forwards;
-}
-
-.quote {
-    font-size: 1.2rem;
-    opacity: 0;
-    animation: fade 2s ease forwards;
-    animation-delay: 1.5s;
-}
-
-.quote span {
-    display: block;
-    margin-top: 10px;
-    opacity: 0.7;
+  margin: 0;
+  background: #0f0f0f;
+  font-family: Arial, sans-serif;
+  color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
 }
 
 /* BUTTON */
-.btn {
-    margin-top: 40px;
-    padding: 14px 30px;
-    border-radius: 30px;
-    border: none;
-    background: white;
-    color: black;
-    font-size: 1rem;
-    cursor: pointer;
-    opacity: 0;
-    animation: fade 2s ease forwards;
-    animation-delay: 3s;
-    transition: 0.3s;
+.open-btn {
+  padding: 14px 28px;
+  border: none;
+  border-radius: 30px;
+  background: #c9a96e;
+  color: white;
+  font-size: 16px;
+  cursor: pointer;
 }
 
-.btn:hover {
-    transform: scale(1.05);
+/* OVERLAY */
+.overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.4s ease;
 }
 
-/* FADE */
-@keyframes fade {
-    to { opacity: 1; }
+/* ACTIVE STATE */
+.overlay.active {
+  opacity: 1;
+  pointer-events: all;
 }
 
-/* MOBILE */
-@media (max-width: 500px) {
-    h1 { font-size: 2rem; }
+/* VIDEO CONTAINER */
+.modal {
+  width: 90%;
+  max-width: 500px;
+  transform: scale(0.8);
+  opacity: 0;
+  transition: all 0.4s ease;
+}
+
+/* ANIMATE IN */
+.overlay.active .modal {
+  transform: scale(1);
+  opacity: 1;
+}
+
+/* VIDEO */
+video {
+  width: 100%;
+  border-radius: 15px;
+  box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+}
+
+/* CLOSE AREA (click outside) */
+.overlay::after {
+  content: "";
+  position: absolute;
+  inset: 0;
 }
 </style>
 </head>
 
 <body>
 
-<canvas id="particles"></canvas>
+<button class="open-btn" onclick="openVideo()">Watch Our Moment</button>
 
-<div class="container">
-    <h1>Where it began…</h1>
-
-    <p class="quote">
-        It’s just a location...
-        <span>Until it became everything.</span>
-    </p>
-
-    <button class="btn" onclick="goToLocation()">
-        Take me there
-    </button>
+<div class="overlay" id="overlay" onclick="closeVideo()">
+  <div class="modal" onclick="event.stopPropagation()">
+    <video id="video" controls playsinline>
+      <source src="video.mp4" type="video/mp4">
+    </video>
+  </div>
 </div>
 
 <script>
-// GOOGLE MAPS LINK
-function goToLocation() {
-    window.location.href = "https://www.google.com/maps?sca_esv=8fdea6dbd6add952&output=search&q=47%C2%B053%2756.0%22N+8%C2%B009%2714.0%22E&source=lnms&fbs=ADc_l-aN0CWEZBOHjofHoaMMDiKpUrv6YeyJhXfuYqj4Fj6c1U4Z6Yq0xAU8tFlmuJvKXCuCpPJN5Ow4lqJLeH5KKHuH4SFDveLlj9a1XkYpKmYQutCgl3TQJnRCS_ZKDI9MnMKIJx08oom5o_Cj0roCVKv1QadcYF10QRv9oD0qpoVdOvSKKn2swsipgnTYqcS4l-TVQ91gG8b3xC4j1wgyo3RO1-nieA&entry=mc&ved=1t:200715&ictx=111";
+const overlay = document.getElementById("overlay");
+const video = document.getElementById("video");
+
+function openVideo() {
+  overlay.classList.add("active");
+
+  // small delay so animation feels smooth
+  setTimeout(() => {
+    video.play().catch(() => {});
+  }, 200);
 }
 
-// PARTICLES
-const canvas = document.getElementById("particles");
-const ctx = canvas.getContext("2d");
-
-canvas.width = window.innerWidth;
-canvas.height = window.innerHeight;
-
-let particles = [];
-
-for (let i = 0; i < 60; i++) {
-    particles.push({
-        x: Math.random() * canvas.width,
-        y: Math.random() * canvas.height,
-        r: Math.random() * 2 + 0.5,
-        dx: (Math.random() - 0.5) * 0.3,
-        dy: (Math.random() - 0.5) * 0.3
-    });
+function closeVideo() {
+  overlay.classList.remove("active");
+  video.pause();
+  video.currentTime = 0;
 }
-
-function draw() {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-    ctx.fillStyle = "white";
-
-    particles.forEach(p => {
-        ctx.beginPath();
-        ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
-        ctx.fill();
-
-        p.x += p.dx;
-        p.y += p.dy;
-
-        // wrap around
-        if (p.x < 0) p.x = canvas.width;
-        if (p.x > canvas.width) p.x = 0;
-        if (p.y < 0) p.y = canvas.height;
-        if (p.y > canvas.height) p.y = 0;
-    });
-
-    requestAnimationFrame(draw);
-}
-
-draw();
-
-// resize fix
-window.addEventListener("resize", () => {
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
-});
 </script>
 
 </body>
