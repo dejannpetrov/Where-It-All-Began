@@ -69,12 +69,69 @@ video {
   border-radius: 15px;
   box-shadow: 0 20px 50px rgba(0,0,0,0.5);
 }
+  
 
 /* CLOSE AREA (click outside) */
 .overlay::after {
   content: "";
   position: absolute;
   inset: 0;
+}
+  <style>
+.watch-btn {
+  padding: 14px 28px;
+  border: none;
+  border-radius: 30px;
+  background: #c9a96e;
+  color: white;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+/* OVERLAY */
+.video-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.75);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.35s ease;
+}
+
+.video-overlay.active {
+  opacity: 1;
+  pointer-events: all;
+}
+
+/* MODAL */
+.video-modal {
+  width: 90%;
+  max-width: 500px;
+
+  transform: scale(0.9);
+  opacity: 0;
+  transition: all 0.35s ease;
+}
+
+.video-overlay.active .video-modal {
+  transform: scale(1);
+  opacity: 1;
+}
+
+/* VIDEO */
+video {
+  width: 100%;
+  border-radius: 15px;
+  background: black;
+}
+
+/* REMOVE default controls UI */
+video::-webkit-media-controls {
+  display: none !important;
 }
 </style>
 </head>
@@ -103,6 +160,19 @@ function openVideo() {
     video.play().catch(() => {});
   }, 200);
 }
+  <!-- BUTTON -->
+<button onclick="openVideo()" class="watch-btn">
+  Watch Our Moment
+</button>
+
+<!-- VIDEO POPUP -->
+<div id="videoOverlay" class="video-overlay">
+  <div class="video-modal" onclick="event.stopPropagation()">
+    <video id="weddingVideo" playsinline preload="auto">
+      <source src="zoom1.mp4" type="video/mp4">
+    </video>
+  </div>
+</div>
 
 function closeVideo() {
   overlay.classList.remove("active");
