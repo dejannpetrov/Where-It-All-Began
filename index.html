@@ -52,7 +52,7 @@ canvas {
     align-items: center;
     color: white;
     text-align: center;
-    transition: opacity 0.8s ease;
+    transition: opacity 0.6s ease;
 }
 
 h1 {
@@ -83,7 +83,7 @@ button {
     opacity: 0;
     z-index: 4;
     white-space: nowrap;
-    transition: opacity 1.2s ease;
+    transition: opacity 1s ease;
 }
 
 /* FINAL */
@@ -105,125 +105,105 @@ button {
 
 <body>
 
-<!-- VIDEO -->
 <div id="videoContainer">
     <video id="video" src="zoom1.mp4" playsinline preload="auto"></video>
 </div>
 
-<!-- PARTICLES -->
 <canvas id="particles"></canvas>
 
-<!-- UI -->
 <div class="container">
     <h1>A Place Worth Remembering</h1>
-    <button id="startBtn">Begin</button>
+    <button onclick="start()">Begin</button>
 </div>
 
-<!-- QUOTE -->
 <div id="quote">Where it Began...</div>
-
-<!-- FINAL -->
 <div id="final">Everything began here...</div>
 
 <script>
 
-/* ---------------- PARTICLES ---------------- */
+/* SIMPLE PARTICLES */
 const canvas = document.getElementById("particles");
 const ctx = canvas.getContext("2d");
 
-function resize() {
+function resize(){
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
 }
 resize();
 
-let particles = [];
-
-for (let i = 0; i < 60; i++) {
-    particles.push({
-        x: Math.random() * canvas.width,
-        y: Math.random() * canvas.height,
-        r: Math.random() * 2,
-        d: Math.random() * 0.5
+let p = [];
+for(let i=0;i<50;i++){
+    p.push({
+        x:Math.random()*canvas.width,
+        y:Math.random()*canvas.height,
+        r:Math.random()*2,
+        d:Math.random()*0.5
     });
 }
 
-function draw() {
+function draw(){
     ctx.clearRect(0,0,canvas.width,canvas.height);
-    ctx.fillStyle = "white";
-    ctx.globalAlpha = 0.4;
+    ctx.fillStyle="white";
+    ctx.globalAlpha=0.4;
 
-    particles.forEach(p => {
+    p.forEach(s=>{
         ctx.beginPath();
-        ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
+        ctx.arc(s.x,s.y,s.r,0,Math.PI*2);
         ctx.fill();
-
-        p.y += p.d;
-        if (p.y > canvas.height) {
-            p.y = 0;
-            p.x = Math.random()*canvas.width;
+        s.y+=s.d;
+        if(s.y>canvas.height){
+            s.y=0;
+            s.x=Math.random()*canvas.width;
         }
     });
 }
-setInterval(draw, 33);
+setInterval(draw,33);
 
-/* ---------------- STORY FLOW ---------------- */
-
-const btn = document.getElementById("startBtn");
-
-btn.addEventListener("pointerdown", startStory); // IMPORTANT FIX
-
-function startStory() {
+/* MAIN FIXED FLOW */
+function start(){
 
     const container = document.querySelector(".container");
     const video = document.getElementById("video");
     const quote = document.getElementById("quote");
     const final = document.getElementById("final");
 
-    // hide UI immediately
     container.style.opacity = "0";
 
-    // reset video safely
-    video.currentTime = 0;
+    // IMPORTANT: play must happen IMMEDIATELY on click
     video.muted = true;
+    video.currentTime = 0;
 
-    // FORCE LOAD VIDEO FIRST (fix iPhone issue)
-    video.load();
+    let playPromise = video.play();
 
-    // show quote
-    setTimeout(() => {
+    if(playPromise !== undefined){
+        playPromise.catch(err=>{
+            console.log("Play blocked:", err);
+        });
+    }
+
+    // quote
+    setTimeout(()=>{
         quote.style.opacity = "1";
-    }, 500);
+    },300);
 
-    // start video reliably
-    setTimeout(() => {
-        let playPromise = video.play();
-
-        if (playPromise !== undefined) {
-            playPromise.catch(() => {
-                console.log("Autoplay blocked, retrying...");
-                video.play();
-            });
-        }
-    }, 900);
-
-    // clear cinematic look
-    setTimeout(() => {
+    // clear video
+    setTimeout(()=>{
         quote.style.opacity = "0";
         video.style.filter = "brightness(1) blur(0px)";
         video.style.transform = "scale(1)";
-    }, 2000);
+    },1800);
 
     // end screen
-    video.addEventListener("timeupdate", () => {
-        if (video.duration && video.currentTime > video.duration - 0.4) {
+    video.addEventListener("timeupdate",()=>{
+        if(video.duration && video.currentTime > video.duration - 0.5){
             final.style.opacity = "1";
             video.style.opacity = "0";
         }
     });
+
 }
 
-window.addEventListener("resize", resize);
+window.addEventListener("resize",resize);
 
 </script>
 
