@@ -182,15 +182,26 @@ function startExperience() {
     const container = document.querySelector('.container');
     const videoContainer = document.getElementById('videoContainer');
     const video = document.getElementById('video');
+    const quote = document.getElementById('quote');
 
     container.style.opacity = "0";
 
+    // Show quote first
     setTimeout(() => {
+        quote.style.opacity = "1";
+    }, 600);
+
+    // Then start video after a short pause
+    setTimeout(() => {
+        quote.style.opacity = "0";
+
         videoContainer.style.display = "flex";
         videoContainer.style.opacity = "1";
+
         video.muted = true;
         video.play();
-    }, 900);
+    }, 2500);
+}
 
     video.onended = () => {
         videoContainer.style.opacity = "0";
