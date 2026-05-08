@@ -2,227 +2,304 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>A Place Worth Remembering</title>
 
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;600&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+
 <style>
-
 *{
-  margin:0;
-  padding:0;
-  box-sizing:border-box;
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
 }
 
-body{
-  width:100%;
-  height:100vh;
-
-  overflow:hidden;
-
-  background:
-  radial-gradient(circle at top, #1b1b1b 0%, #000 70%);
-
-  font-family:-apple-system,BlinkMacSystemFont,sans-serif;
-
-  display:flex;
-  justify-content:center;
-  align-items:center;
-}
-
-/* BUTTON */
-
-.relive-btn{
-
-  padding:16px 34px;
-
-  border:none;
-
-  border-radius:999px;
-
-  background:rgba(255,255,255,0.08);
-
-  color:white;
-
-  font-size:16px;
-
-  letter-spacing:1px;
-
-  backdrop-filter:blur(10px);
-
-  -webkit-backdrop-filter:blur(10px);
-
-  box-shadow:
-  0 10px 30px rgba(0,0,0,0.35);
-
-  cursor:pointer;
-
-  transition:0.3s ease;
-}
-
-.relive-btn:active{
-  transform:scale(0.96);
-}
-
-/* OVERLAY */
-
-.video-overlay{
-
-  position:fixed;
-
-  inset:0;
-
-  background:rgba(0,0,0,0.88);
-
-  backdrop-filter:blur(10px);
-
-  -webkit-backdrop-filter:blur(10px);
-
-  display:flex;
-
-  justify-content:center;
-
-  align-items:center;
-
-  opacity:0;
-
-  pointer-events:none;
-
-  transition:opacity 0.45s ease;
-}
-
-/* OPEN */
-
-.video-overlay.active{
-  opacity:1;
-  pointer-events:auto;
-}
-
-/* VIDEO HOLDER */
-
-.video-wrap{
-
-  width:100vw;
-
-  height:100vh;
-
-  display:flex;
-
-  justify-content:center;
-
-  align-items:center;
-
-  padding:18px;
+html,body{
+    width:100%;
+    height:100%;
+    overflow:hidden;
+    background:black;
+    font-family:'Inter',sans-serif;
 }
 
 /* VIDEO */
 
-.video-wrap video{
-
-  width:94vw;
-
-  max-width:520px;
-
-  height:72vh;
-
-  object-fit:cover;
-
-  border-radius:28px;
-
-  background:black;
-
-  box-shadow:
-  0 25px 80px rgba(0,0,0,0.7);
-
-  opacity:0;
-
-  transform:
-  scale(0.965);
-
-  transition:
-  opacity 0.45s ease,
-  transform 0.45s ease;
+.video-container{
+    position:fixed;
+    inset:0;
+    overflow:hidden;
+    z-index:-3;
 }
 
-/* SHOW */
-
-.video-overlay.active video{
-
-  opacity:1;
-
-  transform:
-  scale(1);
+video{
+    position:absolute;
+    top:50%;
+    left:50%;
+    transform:translate(-50%,-50%) scale(1.08);
+    min-width:100%;
+    min-height:100%;
+    width:auto;
+    height:auto;
+    object-fit:cover;
+    opacity:0;
+    transition:opacity 2.5s ease;
+    filter:brightness(0.55);
 }
 
-/* REMOVE IOS CONTROLS */
+/* MOBILE FIX FOR 1920x1080 VIDEO */
 
-video::-webkit-media-controls{
-  display:none !important;
+@media (max-width:768px){
+    video{
+        height:100%;
+        width:auto;
+        transform:translate(-50%,-50%) scale(1.15);
+    }
 }
 
+/* OVERLAY */
+
+.overlay{
+    position:fixed;
+    inset:0;
+    background:linear-gradient(
+        to bottom,
+        rgba(0,0,0,0.45),
+        rgba(0,0,0,0.72)
+    );
+    z-index:-2;
+}
+
+/* PARTICLES */
+
+#particles{
+    position:fixed;
+    inset:0;
+    z-index:-1;
+    overflow:hidden;
+}
+
+.particle{
+    position:absolute;
+    width:3px;
+    height:3px;
+    border-radius:50%;
+    background:rgba(255,255,255,0.5);
+    animation:float linear infinite;
+}
+
+@keyframes float{
+    from{
+        transform:translateY(100vh);
+        opacity:0;
+    }
+    20%{
+        opacity:1;
+    }
+    to{
+        transform:translateY(-10vh);
+        opacity:0;
+    }
+}
+
+/* CONTENT */
+
+.content{
+    position:relative;
+    width:100%;
+    height:100%;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    flex-direction:column;
+    text-align:center;
+    padding:20px;
+}
+
+.title{
+    font-family:'Cormorant Garamond',serif;
+    font-size:clamp(42px,8vw,90px);
+    color:white;
+    font-weight:300;
+    letter-spacing:1px;
+    opacity:0;
+    transform:translateY(20px);
+    animation:titleReveal 2s ease forwards;
+    text-shadow:0 0 25px rgba(255,255,255,0.12);
+}
+
+@keyframes titleReveal{
+    to{
+        opacity:1;
+        transform:translateY(0);
+    }
+}
+
+.subtitle{
+    margin-top:18px;
+    color:rgba(255,255,255,0.75);
+    font-size:14px;
+    letter-spacing:2px;
+    text-transform:uppercase;
+    opacity:0;
+    animation:fadeIn 2s ease forwards;
+    animation-delay:1s;
+}
+
+@keyframes fadeIn{
+    to{
+        opacity:1;
+    }
+}
+
+/* BUTTON */
+
+.play-btn{
+    margin-top:45px;
+    padding:15px 42px;
+    border:none;
+    border-radius:60px;
+    background:rgba(255,255,255,0.1);
+    backdrop-filter:blur(12px);
+    color:white;
+    font-size:15px;
+    letter-spacing:1px;
+    cursor:pointer;
+    overflow:hidden;
+    position:relative;
+    transition:all .35s ease;
+    opacity:0;
+    animation:fadeIn 2s ease forwards;
+    animation-delay:1.5s;
+}
+
+.play-btn:hover{
+    transform:scale(1.05);
+    background:rgba(255,255,255,0.18);
+}
+
+.play-btn::before{
+    content:'';
+    position:absolute;
+    top:-120%;
+    left:-30%;
+    width:50%;
+    height:300%;
+    background:rgba(255,255,255,0.35);
+    transform:rotate(25deg);
+    transition:.7s;
+}
+
+.play-btn:hover::before{
+    left:120%;
+}
+
+/* POPUP */
+
+.popup{
+    position:fixed;
+    bottom:40px;
+    left:50%;
+    transform:translateX(-50%) translateY(30px);
+    background:rgba(15,15,15,0.78);
+    color:white;
+    padding:16px 28px;
+    border-radius:20px;
+    backdrop-filter:blur(12px);
+    font-size:14px;
+    letter-spacing:1px;
+    opacity:0;
+    transition:1.5s ease;
+    border:1px solid rgba(255,255,255,0.08);
+}
+
+.popup.show{
+    opacity:1;
+    transform:translateX(-50%) translateY(0);
+}
 </style>
 </head>
 
 <body>
 
-<button class="relive-btn" onclick="openVideo()">
-  Relive the Moment
-</button>
-
-<div class="video-overlay" id="videoOverlay">
-
-  <div class="video-wrap" onclick="event.stopPropagation()">
-
-    <video
-      id="proposalVideo"
-      playsinline
-      preload="auto">
-
-      <!-- REPLACE VIDEO HERE -->
-      <source src="zoomnpin.mp4" type="video/mp4">
-
+<div class="video-container">
+    <!-- REPLACE video.mp4 WITH YOUR VIDEO -->
+    <video id="bgVideo" playsinline>
+        <source src="zoomnpin.mp4" type="video/mp4">
     </video>
+</div>
 
-  </div>
+<div class="overlay"></div>
 
+<div id="particles"></div>
+
+<div class="content">
+    <h1 class="title">A place worth remembering</h1>
+
+    <div class="subtitle">
+        Every memory starts somewhere
+    </div>
+
+    <button class="play-btn" id="startBtn">
+        Begin the journey
+    </button>
+</div>
+
+<div class="popup" id="popup">
+    where it began…
 </div>
 
 <script>
+// PARTICLES
 
-const overlay =
-document.getElementById("videoOverlay");
+const particles = document.getElementById('particles');
 
-const video =
-document.getElementById("proposalVideo");
+for(let i = 0; i < 65; i++){
 
-/* OPEN */
+    const p = document.createElement('div');
+    p.classList.add('particle');
 
-function openVideo(){
+    const size = Math.random() * 3 + 1;
 
-  overlay.classList.add("active");
+    p.style.width = size + 'px';
+    p.style.height = size + 'px';
 
-  video.currentTime = 0;
+    p.style.left = Math.random() * 100 + 'vw';
 
-  video.muted = false;
+    p.style.animationDuration = (Math.random() * 18 + 12) + 's';
 
-  video.volume = 1;
+    p.style.animationDelay = Math.random() * 8 + 's';
 
-  video.play().catch(() => {});
+    p.style.opacity = Math.random();
 
+    particles.appendChild(p);
 }
 
-/* CLOSE */
+// VIDEO START
 
-overlay.addEventListener("click", () => {
+const btn = document.getElementById('startBtn');
+const video = document.getElementById('bgVideo');
+const popup = document.getElementById('popup');
 
-  overlay.classList.remove("active");
+btn.addEventListener('click', async () => {
 
-  video.pause();
+    try{
 
-  video.currentTime = 0;
+        await video.play();
 
+        video.style.opacity = "1";
+
+        btn.style.opacity = "0";
+        btn.style.pointerEvents = "none";
+
+        setTimeout(() => {
+            popup.classList.add('show');
+        }, 900);
+
+    }catch(err){
+        console.log(err);
+    }
 });
-
 </script>
 
 </body>
