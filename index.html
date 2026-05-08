@@ -176,21 +176,22 @@ for (let i = 0; i < 100; i++) {
     d: Math.random() * 1.4
   });
 }
-
 function drawParticles() {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
 
   particles.forEach(p => {
-    // glowing particles
-    ctx.beginPath();
 
-    const glow = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, 6);
-    glow.addColorStop(0, "rgba(255,255,255,0.95)");
-    glow.addColorStop(0.4, "rgba(180,200,255,0.4)");
+    // stronger soft white glow (no harsh colors)
+    const glow = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, 10);
+
+    glow.addColorStop(0, "rgba(255,255,255,1)");       // pure white center
+    glow.addColorStop(0.4, "rgba(255,255,255,0.35)");  // soft fade
     glow.addColorStop(1, "rgba(255,255,255,0)");
 
     ctx.fillStyle = glow;
-    ctx.arc(p.x, p.y, p.r * 2.2, 0, Math.PI * 2);
+
+    ctx.beginPath();
+    ctx.arc(p.x, p.y, p.r * 2.8, 0, Math.PI * 2);
     ctx.fill();
 
     // movement
@@ -201,6 +202,9 @@ function drawParticles() {
       p.x = Math.random() * canvas.width;
     }
   });
+
+  requestAnimationFrame(drawParticles);
+}
 
   requestAnimationFrame(drawParticles);
 }
