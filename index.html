@@ -6,31 +6,33 @@
 <title>Memory</title>
 
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500&family=Inter:wght@300;400;600&display=swap');
 
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  font-family: Inter, sans-serif;
 }
 
+/* BASE */
 body {
   height: 100vh;
   overflow: hidden;
-  background: #070a12;
+  background: #060913;
   color: white;
+  font-family: Inter, sans-serif;
 }
 
-/* PARTICLES FULL SCREEN */
+/* PARTICLES */
 canvas {
   position: fixed;
   top: 0;
   left: 0;
   z-index: 0;
+  opacity: 0.75; /* 🔥 more visible now */
 }
 
-/* INTRO SCREEN */
+/* INTRO */
 #intro {
   position: absolute;
   z-index: 2;
@@ -46,30 +48,41 @@ canvas {
   padding: 20px;
 }
 
+/* TITLE */
 h1 {
-  font-weight: 300;
-  font-size: 26px;
-  letter-spacing: 1px;
+  font-family: "Playfair Display", serif; /* ✨ more cinematic */
+  font-weight: 400;
+  font-size: 30px;
+  letter-spacing: 1.2px;
   opacity: 0.95;
   margin-bottom: 30px;
 }
 
+/* BUTTON */
 button {
-  padding: 14px 28px;
+  padding: 14px 30px;
   border-radius: 40px;
   border: none;
   background: white;
   color: black;
   font-weight: 600;
   cursor: pointer;
-  transition: transform 0.3s ease, opacity 0.3s ease;
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
 }
 
+/* hover glow */
 button:hover {
   transform: scale(1.05);
+  box-shadow: 0 0 20px rgba(255,255,255,0.4);
 }
 
-/* VIDEO LAYER */
+/* click flash */
+button:active {
+  box-shadow: 0 0 35px rgba(255,255,255,0.9);
+  transform: scale(0.98);
+}
+
+/* VIDEO */
 #videoContainer {
   position: fixed;
   top: 50%;
@@ -111,7 +124,7 @@ video {
 
 <!-- INTRO -->
 <div id="intro">
-  <h1>The Place Worth Remembering</h1>
+  <h1>The Place Worth Remembering...</h1> <!-- ✨ added dots -->
   <button onclick="startVideo()">Relieve the Moment</button>
 </div>
 
@@ -121,6 +134,7 @@ video {
 </div>
 
 <script>
+
 // VIDEO START
 function startVideo() {
   document.getElementById("intro").style.opacity = "0";
@@ -134,7 +148,7 @@ function startVideo() {
   }, 800);
 }
 
-// PARTICLES (FULL SCREEN FLOAT)
+// PARTICLES (brighter + more visible)
 const canvas = document.getElementById("particles");
 const ctx = canvas.getContext("2d");
 
@@ -143,18 +157,19 @@ canvas.height = window.innerHeight;
 
 let particles = [];
 
-for (let i = 0; i < 90; i++) {
+for (let i = 0; i < 100; i++) {
   particles.push({
     x: Math.random() * canvas.width,
     y: Math.random() * canvas.height,
-    r: Math.random() * 2,
-    d: Math.random() * 1.2
+    r: Math.random() * 2.2,
+    d: Math.random() * 1.4
   });
 }
 
 function drawParticles() {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
-  ctx.fillStyle = "rgba(255,255,255,0.55)";
+
+  ctx.fillStyle = "rgba(255,255,255,0.75)"; // 🔥 stronger glow
 
   particles.forEach(p => {
     ctx.beginPath();
