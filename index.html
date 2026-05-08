@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Memory Proposal</title>
+<title>Memory</title>
 
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap');
@@ -18,11 +18,11 @@
 body {
   height: 100vh;
   overflow: hidden;
-  background: #0b0f1a;
+  background: #070a12;
   color: white;
 }
 
-/* Particle canvas */
+/* PARTICLES FULL SCREEN */
 canvas {
   position: fixed;
   top: 0;
@@ -30,7 +30,7 @@ canvas {
   z-index: 0;
 }
 
-/* Intro screen */
+/* INTRO SCREEN */
 #intro {
   position: absolute;
   z-index: 2;
@@ -40,53 +40,43 @@ canvas {
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  backdrop-filter: blur(8px);
+  text-align: center;
+  backdrop-filter: blur(6px);
   transition: opacity 1.5s ease;
+  padding: 20px;
 }
 
 h1 {
-  font-weight: 400;
-  margin-bottom: 20px;
-  opacity: 0.9;
-}
-
-input {
-  width: 80%;
-  max-width: 320px;
-  padding: 12px;
-  margin: 8px 0;
-  border-radius: 12px;
-  border: none;
-  outline: none;
-  background: rgba(255,255,255,0.08);
-  color: white;
-  text-align: center;
+  font-weight: 300;
+  font-size: 26px;
+  letter-spacing: 1px;
+  opacity: 0.95;
+  margin-bottom: 30px;
 }
 
 button {
-  margin-top: 20px;
-  padding: 12px 24px;
-  border-radius: 30px;
+  padding: 14px 28px;
+  border-radius: 40px;
   border: none;
   background: white;
   color: black;
   font-weight: 600;
   cursor: pointer;
-  transition: transform 0.3s ease;
+  transition: transform 0.3s ease, opacity 0.3s ease;
 }
 
 button:hover {
   transform: scale(1.05);
 }
 
-/* Video layer */
+/* VIDEO LAYER */
 #videoContainer {
   position: fixed;
   top: 50%;
   left: 50%;
   width: 80%;
   height: 45%;
-  transform: translate(-50%, -50%) scale(0.8);
+  transform: translate(-50%, -50%) scale(0.85);
   opacity: 0;
   z-index: 1;
   transition: all 2s ease-in-out;
@@ -96,8 +86,8 @@ video {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  border-radius: 20px;
-  filter: blur(6px) brightness(0.8);
+  border-radius: 18px;
+  filter: blur(6px) brightness(0.75);
   transition: filter 2s ease;
 }
 
@@ -121,9 +111,7 @@ video {
 
 <!-- INTRO -->
 <div id="intro">
-  <h1>Where did it begin?</h1>
-  <input placeholder="Enter a place to remember..." />
-  <input placeholder="Another memory..." />
+  <h1>The Place Worth Remembering</h1>
   <button onclick="startVideo()">Relieve the Moment</button>
 </div>
 
@@ -133,7 +121,7 @@ video {
 </div>
 
 <script>
-// ---------------- VIDEO START ----------------
+// VIDEO START
 function startVideo() {
   document.getElementById("intro").style.opacity = "0";
 
@@ -146,7 +134,7 @@ function startVideo() {
   }, 800);
 }
 
-// ---------------- PARTICLES ----------------
+// PARTICLES (FULL SCREEN FLOAT)
 const canvas = document.getElementById("particles");
 const ctx = canvas.getContext("2d");
 
@@ -155,25 +143,26 @@ canvas.height = window.innerHeight;
 
 let particles = [];
 
-for (let i = 0; i < 60; i++) {
+for (let i = 0; i < 90; i++) {
   particles.push({
     x: Math.random() * canvas.width,
     y: Math.random() * canvas.height,
-    r: Math.random() * 2 + 1,
-    d: Math.random() * 1
+    r: Math.random() * 2,
+    d: Math.random() * 1.2
   });
 }
 
 function drawParticles() {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
-  ctx.fillStyle = "rgba(255,255,255,0.6)";
+  ctx.fillStyle = "rgba(255,255,255,0.55)";
 
   particles.forEach(p => {
     ctx.beginPath();
-    ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2, false);
+    ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
     ctx.fill();
 
     p.y -= p.d;
+
     if (p.y < 0) {
       p.y = canvas.height;
       p.x = Math.random() * canvas.width;
@@ -185,7 +174,6 @@ function drawParticles() {
 
 drawParticles();
 
-// resize fix
 window.addEventListener("resize", () => {
   canvas.width = window.innerWidth;
   canvas.height = window.innerHeight;
